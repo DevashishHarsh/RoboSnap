@@ -1,5 +1,5 @@
-// static/js/app.js  (updated exporter + attach-point handling)
-// minimal comments, only necessary changes
+
+
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -60,12 +60,12 @@ transformControl.addEventListener('objectChange', () => {
   if (selectedInstanceId) {
     onTransformChanged(selectedInstanceId);
     
-    // Throttle the properties panel refresh for better performance
+    
     if (!transformControl._refreshTimeout) {
       transformControl._refreshTimeout = setTimeout(() => {
         refreshPropertiesPanel();
         transformControl._refreshTimeout = null;
-      }, 16); // ~60fps refresh rate
+      }, 16); 
     }
   }
 });
@@ -123,10 +123,10 @@ function enterCopyMode(sourceId) {
   copySourceId = sourceId;
   selectionEnabled = false;
   
-  // Create ghost object (semi-transparent copy)
+  
   createGhostObject(sourceId);
   
-  // Change cursor
+  
   canvas.style.cursor = 'crosshair';
   
   console.log('Copy mode: Click to place copy, right-click or Escape to cancel');
@@ -162,7 +162,7 @@ function createGhostObject(sourceId) {
 function updateGhostPosition(event) {
   if (!ghostObject || !copyMode) return;
   
-  // Use the same positioning as spawn from event
+  
   const pos = getSpawnPositionFromEvent(event);
   ghostObject.position.set(pos.x, pos.y, pos.z);
 }
@@ -172,13 +172,13 @@ function exitCopyMode() {
   copySourceId = null;
   selectionEnabled = true;
   
-  // Remove ghost object
+  
   if (ghostObject) {
     scene.remove(ghostObject);
     ghostObject = null;
   }
   
-  // Reset cursor
+  
   canvas.style.cursor = '';
 }
 
@@ -187,10 +187,10 @@ async function createCopyAtPosition(pos) {
   
   const sourceInst = instances[copySourceId];
   try {
-    // Create new instance from the same URDF
+    
     const newInst = await instantiateURDFFromURL(sourceInst.sourceURL, pos);
     
-    // Copy the scale and other properties
+    
     if (newInst && newInst.rootGroup) {
       newInst.rootGroup.scale.copy(sourceInst.rootGroup.scale);
       newInst.rootGroup.rotation.copy(sourceInst.rootGroup.rotation);
@@ -220,7 +220,7 @@ function addSelectionOutline(instanceId) {
         const edges = new THREE.EdgesGeometry(child.geometry);
         const outline = new THREE.LineSegments(edges, outlineMaterial.clone());
         
-        // Copy the mesh's transform relative to the instance root
+        
         outline.position.copy(child.position);
         outline.rotation.copy(child.rotation);
         outline.scale.copy(child.scale);
@@ -235,7 +235,7 @@ function addSelectionOutline(instanceId) {
   });
   
   if (outlineGroup.children.length > 0) {
-    // Add outline group as child of the instance root so it follows transforms
+    
     inst.rootGroup.add(outlineGroup);
     selectedInstanceOutline = outlineGroup;
   }
@@ -245,18 +245,18 @@ function removeSelectionOutline() {
   
   if (selectedInstanceOutline) {
     
-    // More aggressive removal approach
+    
     if (selectedInstanceOutline.parent) {
       selectedInstanceOutline.parent.remove(selectedInstanceOutline);
     }
     
-    // Also try removing from scene directly in case it's orphaned
+    
     scene.remove(selectedInstanceOutline);
     
-    // Force visibility off before disposal
+    
     selectedInstanceOutline.visible = false;
     
-    // Dispose resources
+    
     selectedInstanceOutline.traverse(child => {
       if (child.geometry) {
         child.geometry.dispose();
@@ -268,13 +268,13 @@ function removeSelectionOutline() {
           child.material.dispose();
         }
       }
-      // Force child invisible too
+      
       child.visible = false;
     });
     
     selectedInstanceOutline = null;
     
-    // Force a render update
+    
     renderer.render(scene, camera);
   }
 }
@@ -305,7 +305,7 @@ function buildPartList(manifest) {
     el.dataset.title = titleText;
     el.dataset.url = entry.url || '';
 
-    // thumbnail container
+    
     const thumb = document.createElement('div');
     thumb.className = 'part-thumb';
     thumb.style.display = 'inline-flex';
@@ -314,7 +314,7 @@ function buildPartList(manifest) {
     thumb.style.overflow = 'hidden';
     thumb.style.position = 'relative';
 
-    // show initials immediately while image is loading
+    
     const initialsNode = document.createElement('span');
     initialsNode.className = 'part-initials';
     initialsNode.textContent = (titleText || 'P').slice(0, 2).toUpperCase();
@@ -323,18 +323,18 @@ function buildPartList(manifest) {
     initialsNode.style.zIndex = '1';
     thumb.appendChild(initialsNode);
 
-    // visible title should be the part title (not the description)
+    
     const titleDiv = document.createElement('div');
     titleDiv.className = 'part-title';
     titleDiv.textContent = titleText;
 
-    // helper to show initials fallback
+    
     const showInitialsFallback = () => {
       if (!thumb.contains(initialsNode)) thumb.appendChild(initialsNode);
       initialsNode.style.display = '';
     };
 
-    // helper to show image and remove initials
+    
     const showImage = (img) => {
       initialsNode.style.display = 'none';
       img.style.visibility = 'visible';
@@ -343,9 +343,9 @@ function buildPartList(manifest) {
     if (entry.icon_url) {
       const img = document.createElement('img');
       img.alt = titleText;
-      if (entry.desc) img.title = entry.desc; // tooltip on image
+      if (entry.desc) img.title = entry.desc; 
       img.loading = 'lazy';
-      // keep it hidden until load succeeds
+      
       img.style.visibility = 'hidden';
       img.style.width = '100%';
       img.style.height = '100%';
@@ -356,7 +356,7 @@ function buildPartList(manifest) {
       img.style.left = '0';
       img.style.zIndex = '0';
 
-      // candidate paths
+      
       const basename = (entry.icon_url || '').split('/').pop();
       const candidates = [
         entry.icon_url,
@@ -387,23 +387,23 @@ function buildPartList(manifest) {
 
       img.addEventListener('error', (ev) => {
         console.warn('Icon load error for', entry.title, 'src=', img.src);
-        // try the next candidate
+        
         tryNext();
       });
 
-      // start attempts and append image (kept hidden until load)
+      
       tryNext();
       thumb.appendChild(img);
     } else {
-      // no icon_url: keep initials
+      
       showInitialsFallback();
     }
 
-    // assemble element
+    
     el.appendChild(thumb);
     el.appendChild(titleDiv);
 
-    // dragstart
+    
     el.addEventListener('dragstart', ev => {
       try { ev.dataTransfer.effectAllowed = 'copyMove'; } catch (e) {}
       try { ev.dataTransfer.setData('text/uri-list', entry.url || ''); } catch (e) {}
@@ -436,11 +436,11 @@ function findNearestMeshByScreenDistance(screenX, screenY, maxDistancePixels = 5
     const inst = instances[id];
     inst.rootGroup.traverse(child => {
       if (child.isMesh && child.userData && child.userData.instanceId) {
-        // Get screen position of mesh center
+        
         child.getWorldPosition(tempVector);
         tempVector.project(camera);
         
-        // Convert from NDC to screen pixels
+        
         const rect = canvas.getBoundingClientRect();
         const screenPixelX = (tempVector.x + 1) * rect.width / 2;
         const screenPixelY = (-tempVector.y + 1) * rect.height / 2;
@@ -521,14 +521,14 @@ function getSpawnPositionFromEvent(e, distance = 0.3){
   const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
   const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
   
-  // Create a ray from the camera through the mouse position
+  
   const mouseVector = new THREE.Vector3(x, y, 0.5);
   mouseVector.unproject(camera);
   
-  // Get direction from camera to mouse point
+  
   const direction = mouseVector.sub(camera.position).normalize();
   
-  // Place object at specified distance along the ray
+  
   const position = camera.position.clone().add(direction.multiplyScalar(distance));
   
   return { x: position.x, y: position.y, z: position.z };
@@ -781,12 +781,12 @@ canvas.addEventListener('pointerdown', function(e){
   }
 
   if (copyMode) {
-    if (e.button === 0) { // Left click - place copy
-      const pos = getSpawnPositionFromEvent(e); // This should work correctly
+    if (e.button === 0) { 
+      const pos = getSpawnPositionFromEvent(e); 
       createCopyAtPosition(pos).then(() => {
         exitCopyMode();
       });
-    } else if (e.button === 2) { // Right click - cancel
+    } else if (e.button === 2) { 
       exitCopyMode();
     }
     e.preventDefault();
@@ -818,7 +818,7 @@ canvas.addEventListener('pointerdown', function(e){
 
   const intersects = ray.intersectObjects(scene.children, true);
 
-  // First check for attach sphere clicks (existing logic)
+  
   let hit = intersects.length > 0 ? intersects[0].object : null;
   const sphereHit = intersects.find(i => i.object.userData && i.object.userData.isAttachSphere);
   if (sphereHit) hit = sphereHit.object;
@@ -833,21 +833,21 @@ canvas.addEventListener('pointerdown', function(e){
     return;
   }
 
-  // Check for transform control interaction
+  
   let p = hit;
   while (p){
     if (p === transformControl) return;
     p = p.parent;
   }
 
-  // Try raycast first, then fallback to screen distance
+  
   let targetObject = null;
 
   if (hit) {
-    // Find instance ID from raycast hit, but skip selection outline
+    
     p = hit;
     while (p){
-      // Skip if this is a selection outline
+      
       if (p.name && p.name.includes('selection_outline')) {
         break;
       }
@@ -860,7 +860,7 @@ canvas.addEventListener('pointerdown', function(e){
     }
   }
   
-  // If raycast failed, try screen distance method
+  
   if (!targetObject) {
   const nearestMesh = findNearestMeshByScreenDistance(screenX, screenY, 50);
   if (nearestMesh) {
@@ -967,7 +967,7 @@ function performSnapBetween(aObj, bObj){
   const parentInv = parentWorld.clone().invert();
   const childRel = new THREE.Matrix4().multiplyMatrices(parentInv, childWorld);
 
-  // determine parentTargetLinkName, avoid attaching to attach-only links (no visual & no collision)
+  
   let parentTargetLinkName = null;
   if (instB.parsed && instB.linkObjects) {
     for (const lname in instB.linkObjects){
@@ -983,58 +983,58 @@ function performSnapBetween(aObj, bObj){
   }
   if (!parentTargetLinkName) parentTargetLinkName = instB.rootLinkName;
 
-  // If chosen parentTargetLinkName is an attach-only link (no visual & no collision), fall back to rootLinkName
-  // Enhanced logic: If we found an AP link or attach-only link, trace it to find the real link it moves with
+  
+  
   if (instB.parsed && instB.parsed.links && parentTargetLinkName) {
     const found = instB.parsed.links.find(l => l.name === parentTargetLinkName);
     
-    // If it's an AP link or attach-only link, we need to find what real link it moves with
+    
     if ((found && !found.hasVisual && !found.hasCollision) || parentTargetLinkName.includes('AP')) {
       
-      // Function to find the real link that this AP link is kinematically connected to
+      
       function findKinematicRealLink(apLinkName, visited = new Set()) {
-        if (visited.has(apLinkName)) return null; // Prevent infinite loops
+        if (visited.has(apLinkName)) return null; 
         visited.add(apLinkName);
         
         if (!instB.parsed.joints) return null;
         
-        // Look for joints where this AP link is involved
+        
         for (const joint of instB.parsed.joints) {
           
-          // Case 1: AP link is the CHILD of a joint (it moves relative to parent)
+          
           if (joint.child === apLinkName) {
-            // For ANY joint type, if something is attached to the child link,
-            // it moves WITH that child link. We need to find what real geometry
-            // is connected to this child link.
             
-            // First, check if this child link has any real children (links attached to it)
+            
+            
+            
+            
             const childJoints = instB.parsed.joints.filter(j => j.parent === apLinkName);
             for (const childJoint of childJoints) {
               const childLink = instB.parsed.links.find(l => l.name === childJoint.child);
               if (childLink && (childLink.hasVisual || childLink.hasCollision) && !childLink.name.includes('AP')) {
-                return childJoint.child; // Found a real link attached to this AP
+                return childJoint.child; 
               }
             }
             
-            // If no real children, this AP link IS the moving part
-            // Since we can't export AP links, we need to connect to the parent
-            // but store the transform that accounts for the joint motion
+            
+            
+            
             const parentLink = instB.parsed.links.find(l => l.name === joint.parent);
             if (parentLink && (parentLink.hasVisual || parentLink.hasCollision) && !parentLink.name.includes('AP')) {
               console.log(`AP link ${apLinkName} is child of joint ${joint.name}, connecting to parent ${joint.parent}`);
               return joint.parent;
             }
             
-            // If parent is also AP, trace further
+            
             if (parentLink && (parentLink.name.includes('AP') || (!parentLink.hasVisual && !parentLink.hasCollision))) {
               return findKinematicRealLink(joint.parent, visited);
             }
           }
           
-          // Case 2: AP link is the PARENT of a joint (children move relative to it)
+          
           if (joint.parent === apLinkName) {
-            // This AP link is a parent - things attached to it should move with it
-            // Check if this parent has a real parent (what it's attached to)
+            
+            
             const parentJoints = instB.parsed.joints.filter(j => j.child === apLinkName);
             if (parentJoints.length > 0) {
               const grandparentLink = instB.parsed.links.find(l => l.name === parentJoints[0].parent);
@@ -1044,7 +1044,7 @@ function performSnapBetween(aObj, bObj){
               }
             }
             
-            // If no real grandparent, check if any children are real
+            
             const childLink = instB.parsed.links.find(l => l.name === joint.child);
             if (childLink && (childLink.hasVisual || childLink.hasCollision) && !childLink.name.includes('AP')) {
               console.log(`AP link ${apLinkName} is parent of real child ${joint.child}`);
@@ -1099,7 +1099,7 @@ function selectInstance(id){
   if (selectedInstanceId && transformControl.object) transformControl.detach();
   selectedInstanceId = id;
   
-  // Add selection outline
+  
   addSelectionOutline(id);
   
   refreshPropertiesPanel();
@@ -1120,7 +1120,7 @@ function deselectInstance(){
   
   selectedInstanceId = null;
   
-  // Remove selection outline
+  
   removeSelectionOutline();
   
   if (transformControl && transformControl.object) {
@@ -1341,19 +1341,19 @@ function buildOutlinerNode(id, depth){
     
     const parentInst = instances[inst.parentId];
     if (parentInst) {
-      // Remove from parent's children list
+      
       parentInst.childrenIds = parentInst.childrenIds.filter(childId => childId !== id);
       
-      // Remove joint connection from parent
+      
       if (parentInst.joints) {
         parentInst.joints = parentInst.joints.filter(joint => joint.childId !== id);
       }
     }
     
-    // Clear parent relationship
+    
     inst.parentId = null;
     
-    // Refresh UI
+    
     refreshOutliner();
     refreshPropertiesPanel();
     
@@ -1591,10 +1591,10 @@ function refreshPropertiesPanel(){
       num.max = range.max;
       num.value = Math.round((parseFloat(range.value) || 0) * 1000) / 1000;
 
-      // row layout
+      
       row.classList.add('joint-row');
 
-      // shared update function
+      
       function applyJointValueToModel(value) {
         const v = parseFloat(value) || 0;
         j.value = v;
@@ -1610,14 +1610,14 @@ function refreshPropertiesPanel(){
         onTransformChanged(inst.id);
       }
 
-      // sync: range -> number
+      
       range.addEventListener('input', () => {
         const v = parseFloat(range.value) || 0;
         num.value = Math.round(v * 1000) / 1000;
         applyJointValueToModel(v);
       });
 
-      // sync: number -> range (typing)
+      
       num.addEventListener('change', () => {
         let v = parseFloat(num.value);
         if (isNaN(v)) v = 0;
@@ -1633,7 +1633,7 @@ function refreshPropertiesPanel(){
       row.appendChild(num);
       jbox.appendChild(row);
     });
-    // Reset all joints button
+    
     const resetBtn = document.createElement('button');
     resetBtn.textContent = 'Reset all joints'; resetBtn.style.width = '100%'; resetBtn.classList.add('btn-redblack');resetBtn.style.marginTop='10px'
     resetBtn.addEventListener('click', () => {
@@ -1731,7 +1731,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'g') {
     if (!selectedInstanceId) return;
     
-    // Show and attach transform control
+    
     if (!transformControl.object || transformControl.object !== instances[selectedInstanceId].rootGroup) {
       transformControl.attach(instances[selectedInstanceId].rootGroup);
     }
@@ -1750,7 +1750,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'r') {
     if (!selectedInstanceId) return;
     
-    // Show and attach transform control
+    
     if (!transformControl.object || transformControl.object !== instances[selectedInstanceId].rootGroup) {
       transformControl.attach(instances[selectedInstanceId].rootGroup);
     }
@@ -1769,7 +1769,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 's' && !e.ctrlKey && !e.metaKey) {
     if (!selectedInstanceId) return;
     
-    // Show and attach transform control
+    
     if (!transformControl.object || transformControl.object !== instances[selectedInstanceId].rootGroup) {
       transformControl.attach(instances[selectedInstanceId].rootGroup);
     }
@@ -1869,7 +1869,7 @@ function focusOnInstance(id){
 function loadScript(src){ return new Promise((resolve,reject)=>{ if(document.querySelector(`script[src="${src}"]`)){ resolve(); return; } const s=document.createElement('script'); s.src=src; s.onload=()=>resolve(); s.onerror=(e)=>reject(e); document.head.appendChild(s); }); }
 
 async function saveAssemblyAsZip(filenameWithoutExt = 'assembly') {
-  // lazy-load JSZip & FileSaver if necessary
+  
   if (typeof JSZip === 'undefined' || typeof saveAs === 'undefined') {
     try {
       await loadScript('https://cdn.jsdelivr.net/npm/jszip@3.10.0/dist/jszip.min.js');
@@ -1882,7 +1882,7 @@ async function saveAssemblyAsZip(filenameWithoutExt = 'assembly') {
   }
 
   try {
-    // 1) Generate the canonical assembly data (your function)
+    
     const assemblyData = generateAssemblyData();
     console.log(assemblyData)
     if (!assemblyData) {
@@ -1920,7 +1920,7 @@ async function saveAssemblyAsZip(filenameWithoutExt = 'assembly') {
           if (!item) return null;
           if (typeof item === 'string') return item.split('/').pop();
           if (typeof item === 'object' && item.filename) return String(item.filename).split('/').pop();
-          // fallback convert to string
+          
           return String(item).split('/').pop();
         })
         .filter(Boolean)
@@ -2203,7 +2203,7 @@ function findAssemblyRoot(){
 
 
 function generateAssemblyData() {
-  // STEP 1: Reset all joint values to 0 (home position)
+  
   console.log('Resetting all joint values to home position...');
   for (const inst of Object.values(instances)) {
     if (inst.internalJoints && inst.internalJoints.length > 0) {
@@ -2223,25 +2223,25 @@ function generateAssemblyData() {
         }
       });
       
-      // Update child transforms after resetting joints
+      
       onTransformChanged(inst.id);
     }
   }
 
-  // STEP 2: Move root instance to origin
+  
   const rootInstances = Object.values(instances).filter(inst => !inst.parentId);
   if (rootInstances.length > 0) {
-    const rootInstance = rootInstances[0]; // Take the first root (topmost parent)
+    const rootInstance = rootInstances[0]; 
     console.log(`Moving root instance ${rootInstance.name} (${rootInstance.id}) to origin...`);
     
-    // Set root position to origin
+    
     rootInstance.rootGroup.position.set(0, 0, 0);
     rootInstance.rootGroup.rotation.set(0, 0, 0);
     
-    // Update all child transforms after moving root
+    
     onTransformChanged(rootInstance.id);
     
-    // Update world matrices
+    
     rootInstance.rootGroup.updateWorldMatrix(true, true);
   }
 
@@ -2260,7 +2260,7 @@ function generateAssemblyData() {
     hierarchy: []
   };
 
-  // Helper function to get first real link name
+  
   function getFirstRealLinkName(parsed) {
     if (!parsed || !parsed.links) return null;
     for (const link of parsed.links) {
@@ -2269,16 +2269,16 @@ function generateAssemblyData() {
     return null;
   }
 
-  // Process each instance
+  
   for (const [instId, inst] of Object.entries(instances)) {
-    // Get instance transforms
+    
     const rootPos = new THREE.Vector3();
     const rootQuat = new THREE.Quaternion();
     const rootScale = new THREE.Vector3();
     inst.rootGroup.matrixWorld.decompose(rootPos, rootQuat, rootScale);
     const rootEuler = new THREE.Euler().setFromQuaternion(rootQuat, 'XYZ');
 
-    // Process links
+    
     const processedLinks = [];
     if (inst.parsed && inst.parsed.links) {
       inst.parsed.links.forEach(link => {
@@ -2300,7 +2300,7 @@ function generateAssemblyData() {
       });
     }
 
-    // Process internal joints
+    
     const processedInternalJoints = [];
     if (inst.internalJoints && inst.internalJoints.length > 0) {
       inst.internalJoints.forEach(joint => {
@@ -2319,7 +2319,7 @@ function generateAssemblyData() {
           isMovable: joint.type !== 'fixed'
         };
 
-        // Get pivot world transform if available
+        
         if (joint.pivot) {
           joint.pivot.updateWorldMatrix(true, true);
           const pivotPos = new THREE.Vector3();
@@ -2335,7 +2335,7 @@ function generateAssemblyData() {
 
         processedInternalJoints.push(jointData);
 
-        // Add to global joint connections
+        
         assemblyData.globalJointConnections.push({
           parent: jointData.parentFullName,
           child: jointData.childFullName,
@@ -2347,7 +2347,7 @@ function generateAssemblyData() {
           jointData: jointData
         });
 
-        // Add to movable joints if not fixed
+        
         if (joint.type !== 'fixed') {
           assemblyData.movableJoints.push({
             instanceId: instId,
@@ -2365,7 +2365,7 @@ function generateAssemblyData() {
       });
     }
 
-    // Process snap joints
+    
     const processedSnapJoints = [];
     if (inst.joints && inst.joints.length > 0) {
       inst.joints.forEach(joint => {
@@ -2377,8 +2377,8 @@ function generateAssemblyData() {
         const childLinkFull = `${joint.childId}__${childFirstLink}`;
         const snapJointName = `snap_${instId}_to_${joint.childId}`;
 
-        // Calculate relative transform
-        // Calculate relative transform
+        
+        
         let relativeTransform = { xyz: [0,0,0], rpy: [0,0,0], quaternion: [0,0,0,1] };
         if (joint.childRelMatrix) {
           const relPos = new THREE.Vector3();
@@ -2387,7 +2387,7 @@ function generateAssemblyData() {
           
           relativeTransform = {
             xyz: [relPos.x, relPos.y, relPos.z],
-            rpy: [0, 0, 0], // Keep for compatibility, but use quaternion as primary
+            rpy: [0, 0, 0], 
             quaternion: [relQuat.x, relQuat.y, relQuat.z, relQuat.w]
           };
         }
@@ -2409,7 +2409,7 @@ function generateAssemblyData() {
 
         processedSnapJoints.push(snapJointData);
 
-        // Add to global joint connections
+        
         assemblyData.globalJointConnections.push({
           parent: parentLinkFull,
           child: childLinkFull,
@@ -2423,7 +2423,7 @@ function generateAssemblyData() {
       });
     }
 
-    // Add instance data
+    
     assemblyData.instances[instId] = {
       id: instId,
       name: inst.name,
@@ -2432,22 +2432,22 @@ function generateAssemblyData() {
       childrenIds: inst.childrenIds || [],
       rootLinkName: inst.rootLinkName,
       
-      // Transform data
+      
       worldTransform: {
         position: [rootPos.x, rootPos.y, rootPos.z],
         rotation: [rootEuler.x, rootEuler.y, rootEuler.z],
         scale: [rootScale.x, rootScale.y, rootScale.z]
       },
 
-      // Processed data
+      
       links: processedLinks,
       internalJoints: processedInternalJoints,
       snapJoints: processedSnapJoints,
 
-      // Original data for reference
+      
       parsed: inst.parsed,
       
-      // Statistics
+      
       stats: {
         totalLinks: processedLinks.length,
         visualLinks: processedLinks.filter(l => l.hasVisual).length,
@@ -2460,7 +2460,7 @@ function generateAssemblyData() {
     };
   }
 
-  // Build hierarchy
+  
   const rootHierarchy = Object.values(instances).filter(inst => !inst.parentId);
   
   function buildHierarchy(inst) {
@@ -2487,9 +2487,9 @@ function generateAssemblyData() {
   return assemblyData;
 }
 
-// Helper function to calculate final mesh scale
+
 function calculateFinalMeshScale(mesh, inst) {
-  let finalScale = [0.001, 0.001, 0.001]; // Default scale used in app.js
+  let finalScale = [0.001, 0.001, 0.001]; 
   
   if (mesh.scale && mesh.scale.length) {
     finalScale = [
@@ -2499,7 +2499,7 @@ function calculateFinalMeshScale(mesh, inst) {
     ];
   }
   
-  // Apply instance scaling
+  
   if (inst.rootGroup && inst.rootGroup.scale) {
     finalScale[0] *= inst.rootGroup.scale.x || 1;
     finalScale[1] *= inst.rootGroup.scale.y || 1;
@@ -2509,7 +2509,7 @@ function calculateFinalMeshScale(mesh, inst) {
   return finalScale;
 }
 
-// Helper function to get joint origin from parsed URDF data
+
 function getJointOriginFromParsed(parsed, jointName) {
   if (!parsed || !parsed.joints) return { xyz: [0,0,0], rpy: [0,0,0] };
   
@@ -2561,7 +2561,7 @@ function enterSimulationMode(vizBtn){
       lab.textContent = `${item.inst.name} - ${item.j.name || (item.j.parent + '_to_' + item.j.child)}`;
       lab.style.fontWeight = '600';
 
-      // range
+      
       const range = document.createElement('input');
       range.type = 'range';
       range.min = (item.j.limit && !isNaN(item.j.limit.lower)) ? item.j.limit.lower : (item.j.type === 'prismatic' ? -0.1 : -Math.PI);
@@ -2570,7 +2570,7 @@ function enterSimulationMode(vizBtn){
       range.style.width = "100%";
       range.value = item.j.value || 0;
 
-      // number input
+      
       const num = document.createElement('input');
       num.type = 'number';
       num.className = 'joint-number';

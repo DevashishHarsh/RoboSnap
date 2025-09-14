@@ -6,12 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
   
   startBtn.addEventListener('click', () => {
     
-    window.location.href = 'index.html';
+    window.location.href = 'main.html';
   });
 
   openApp.addEventListener('click', (e) => {
     e.preventDefault();
-    window.location.href = 'index.html';
+    window.location.href = 'main.html';
   });
 
   dismiss.addEventListener('click', (e) => {
