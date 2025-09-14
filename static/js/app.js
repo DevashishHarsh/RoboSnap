@@ -1,6 +1,3 @@
-
-
-
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
@@ -516,7 +513,7 @@ function getSpawnPositionInFrontOfCamera(distance=0.6){
   return { x:p.x, y:p.y, z:p.z };
 }
 
-function getSpawnPositionFromEvent(e, distance = 0.3){
+function getSpawnPositionFromEvent(e, distance = 0.05){
   const rect = canvas.getBoundingClientRect();
   const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
   const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
