@@ -1,0 +1,121 @@
+<?xml version="1.0" ?>
+<robot name="beam_s">
+
+<link name="beam_s_base_link">
+  <inertial>
+    <origin xyz="0.0 0.0025 0.0" rpy="0 0 0"/>
+    <mass value="0.00785"/>
+    <inertia ixx="0.0" iyy="1e-06" izz="1e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/beam_s_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/beam_s_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="beam_s_APS1_1">
+  <inertial>
+    <origin xyz="8.153811604686948e-20 0.0 7.806255641895632e-18" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="beam_s_APS2_1">
+  <inertial>
+    <origin xyz="1.232595164407831e-34 8.673617379884035e-19 6.661338147750939e-18" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="beam_s_APS4_1">
+  <inertial>
+    <origin xyz="-2.0710099118192537e-19 0.0 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="beam_s_APB_1">
+  <inertial>
+    <origin xyz="-3.469446951953614e-18 0.0 1.687989959549192e-50" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="beam_s_APS3_1">
+  <inertial>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="beam_s_APT_1">
+  <inertial>
+    <origin xyz="0.0 0.0 -6.661338147750939e-18" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<joint name="Rigid 1" type="fixed">
+  <origin xyz="0.0 0.0025 0.0025" rpy="0 0 0"/>
+  <parent link="beam_s_base_link"/>
+  <child link="beam_s_APS1_1"/>
+</joint>
+
+<joint name="Rigid 2" type="fixed">
+  <origin xyz="0.0 0.005 0.0" rpy="0 0 0"/>
+  <parent link="beam_s_base_link"/>
+  <child link="beam_s_APS2_1"/>
+</joint>
+
+<joint name="Rigid 3" type="fixed">
+  <origin xyz="0.0 0.0025 -0.0025" rpy="0 0 0"/>
+  <parent link="beam_s_base_link"/>
+  <child link="beam_s_APS4_1"/>
+</joint>
+
+<joint name="Rigid 4" type="fixed">
+  <origin xyz="0.02 0.0025 0.0" rpy="0 0 0"/>
+  <parent link="beam_s_base_link"/>
+  <child link="beam_s_APB_1"/>
+</joint>
+
+<joint name="Rigid 5" type="fixed">
+  <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  <parent link="beam_s_base_link"/>
+  <child link="beam_s_APS3_1"/>
+</joint>
+
+<joint name="Rigid 6" type="fixed">
+  <origin xyz="-0.02 0.0025 0.0" rpy="0 0 0"/>
+  <parent link="beam_s_base_link"/>
+  <child link="beam_s_APT_1"/>
+</joint>
+
+</robot>

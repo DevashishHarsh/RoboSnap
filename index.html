@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>RoboSnap - Build Your Robot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="static/css/style.css" />
+</head>
+<body>
+  <!-- Top bar: app title left, Undo/Redo + Save on right -->
+  <header id="topbar" role="banner">
+    <div id="topbar-left" aria-hidden="false">
+      <div id="app-logo">
+        <img src="static/images/logo.png" alt="RoboSnap Logo" style="height:28px; vertical-align:middle;">
+        RoboSnap
+      </div>
+      <div id="app-sub">assemble • snap • export</div>
+
+      <button id="help-btn" class="btn-help" title="Help" aria-label="Help">?</button>
+    </div>
+
+    <div id="topbar-right" aria-label="Actions" style="padding-top: 10px;">
+      <button id="save-btn" class="btn-primary" title="Save assembly" aria-label="Save assembly">Save assembly</button>
+    </div>
+  </header>
+
+  <!-- Main layout: left / center / right -->
+  <div id="container" role="main">
+    <!-- LEFT: search + parts list + outliner -->
+    <aside id="left-column" class="pane left" role="complementary" aria-label="Parts and outliner">
+      <div class="left-header">
+        <label for="search" class="left-title" style="padding-left: 5px;">Parts</label>
+        <div class="search-wrap" role="search">
+          <input id="search" placeholder="Search parts (name or file)..." autocomplete="off" />
+          <button id="search-clear" class="icon-btn" title="Clear search" aria-label="Clear search">✕</button>
+        </div>
+      </div>
+
+      <div id="part-list" class="part-list" aria-live="polite" aria-label="Parts list"></div>
+
+      <div class="left-outliner" aria-label="Outliner">
+        <div class="outliner-header">
+          <h3>Outliner</h3>
+        </div>
+        <div id="outliner-tree" class="outliner-tree" role="tree" aria-label="Scene outliner"></div>
+      </div>
+    </aside>
+
+    <!-- CENTER: visualizer canvas -->
+    <main id="center-column" class="pane center" role="application" aria-label="3D visualizer">
+      <canvas id="glcanvas" tabindex="0" aria-label="3D canvas"></canvas>
+    </main>
+
+    <!-- RIGHT: properties -->
+    <aside id="right-column" class="pane right" role="complementary" aria-label="Properties">
+      <div class="properties-header">
+        <h3>Properties</h3>
+      </div>
+      <div id="properties-panel" class="properties-panel" aria-live="polite">Select an item</div>
+    </aside>
+  </div>
+
+  <script>
+  (function(){
+    const helpBtn = document.getElementById('help-btn');
+    if (!helpBtn) return;
+    helpBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      // navigate to the tutorial page in the same tab
+      window.location.href = 'tutorial.html';
+      // alternatively use location.assign('tutorial.html');
+    });
+  })();
+</script>
+
+  <!-- importmap + app script (app.js should wire the elements by IDs above) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js",
+      "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module" src="static/js/app.js"></script>
+</body>
+</html>

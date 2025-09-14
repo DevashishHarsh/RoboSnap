@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<robot name="tubes_c">
+
+<link name="tubes_c_base_link">
+  <inertial>
+    <origin xyz="0.0 0.014999999999999996 0.0" rpy="0 0 0"/>
+    <mass value="0.07398450699203965"/>
+    <inertia ixx="7e-06" iyy="4e-06" izz="7e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/tubes_c_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/tubes_c_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="tubes_c_AP1_1">
+  <inertial>
+    <origin xyz="0.0 -3.3306690738754695e-18 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="tubes_c_AP2_1">
+  <inertial>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<joint name="Rigid 1" type="fixed">
+  <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  <parent link="tubes_c_base_link"/>
+  <child link="tubes_c_AP1_1"/>
+</joint>
+
+<joint name="Rigid 2" type="fixed">
+  <origin xyz="0.0 0.03 0.0" rpy="0 0 0"/>
+  <parent link="tubes_c_base_link"/>
+  <child link="tubes_c_AP2_1"/>
+</joint>
+
+</robot>

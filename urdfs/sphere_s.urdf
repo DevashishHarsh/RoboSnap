@@ -1,0 +1,121 @@
+<?xml version="1.0" ?>
+<robot name="sphere_s">
+
+<link name="sphere_s_base_link">
+  <inertial>
+    <origin xyz="-1.3564652801627322e-14 -5.7138385853527054e-18 1.1427677170705411e-17" rpy="0 0 0"/>
+    <mass value="0.19523689346126255"/>
+    <inertia ixx="2.7e-05" iyy="2.7e-05" izz="2.7e-05" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/sphere_s_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/sphere_s_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="sphere_s_AP2_1">
+  <inertial>
+    <origin xyz="-3.9898639947466526e-19 0.0 4.440892098500626e-18" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="sphere_s_AP4_1">
+  <inertial>
+    <origin xyz="0.0 8.881784197001253e-18 -2.532696274926138e-18" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="sphere_s_AP3_1">
+  <inertial>
+    <origin xyz="3.816391647148971e-19 0.0 2.220446049250313e-18" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="sphere_s_AP5_1">
+  <inertial>
+    <origin xyz="-1.3866695599588098e-34 0.0 3.469446951953614e-18" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="sphere_s_AP1_1">
+  <inertial>
+    <origin xyz="-1.0408340855860807e-19 4.440892098500626e-18 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="sphere_s_AP6_1">
+  <inertial>
+    <origin xyz="0.0 2.220446049250313e-18 1.0928757898653883e-18" rpy="0 0 0"/>
+    <mass value="3.288200310757317e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<joint name="Rigid 1" type="fixed">
+  <origin xyz="0.0 -0.015 0.0" rpy="0 0 0"/>
+  <parent link="sphere_s_base_link"/>
+  <child link="sphere_s_AP2_1"/>
+</joint>
+
+<joint name="Rigid 2" type="fixed">
+  <origin xyz="0.015 0.0 0.0" rpy="0 0 0"/>
+  <parent link="sphere_s_base_link"/>
+  <child link="sphere_s_AP4_1"/>
+</joint>
+
+<joint name="Rigid 3" type="fixed">
+  <origin xyz="0.0 0.015 0.0" rpy="0 0 0"/>
+  <parent link="sphere_s_base_link"/>
+  <child link="sphere_s_AP3_1"/>
+</joint>
+
+<joint name="Rigid 4" type="fixed">
+  <origin xyz="0.0 0.0 0.015" rpy="0 0 0"/>
+  <parent link="sphere_s_base_link"/>
+  <child link="sphere_s_AP5_1"/>
+</joint>
+
+<joint name="Rigid 5" type="fixed">
+  <origin xyz="0.0 0.0 -0.015" rpy="0 0 0"/>
+  <parent link="sphere_s_base_link"/>
+  <child link="sphere_s_AP1_1"/>
+</joint>
+
+<joint name="Rigid 6" type="fixed">
+  <origin xyz="-0.015 0.0 0.0" rpy="0 0 0"/>
+  <parent link="sphere_s_base_link"/>
+  <child link="sphere_s_AP6_1"/>
+</joint>
+
+</robot>

@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<robot name="wheel_l">
+
+<link name="wheel_l_base_link">
+  <inertial>
+    <origin xyz="3.2719824703128014e-13 0.0025 0.0" rpy="0 0 0"/>
+    <mass value="0.00302514313348508"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/wheel_l_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/wheel_l_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="wheel_l_AP_1">
+  <inertial>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <mass value="4.110250388446646e-06"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<joint name="Rigid 1" type="fixed">
+  <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  <parent link="wheel_l_base_link"/>
+  <child link="wheel_l_AP_1"/>
+</joint>
+
+</robot>

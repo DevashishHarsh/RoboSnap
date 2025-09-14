@@ -1,0 +1,169 @@
+<?xml version="1.0" ?>
+<robot name="base_plate">
+
+<link name="base_plate_base_link">
+  <inertial>
+    <origin xyz="2.842813972411771e-17 2.842813972411771e-18 0.002499445697675675" rpy="0 0 0"/>
+    <mass value="0.09810280464790237"/>
+    <inertia ixx="2.1e-05" iyy="2.1e-05" izz="4.1e-05" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/base_plate_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/base_plate_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="base_plate_APC1_2">
+  <inertial>
+    <origin xyz="3.333333333452315e-07 -3.333333333382926e-07 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="base_plate_APE1_2">
+  <inertial>
+    <origin xyz="3.333333333348232e-07 -4.529598545378531e-18 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="base_plate_APC2_2">
+  <inertial>
+    <origin xyz="3.333333333382926e-07 3.3333333332441484e-07 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="base_plate_APE2_2">
+  <inertial>
+    <origin xyz="4.4001814440819565e-18 3.333333333278843e-07 0.0" rpy="0 0 0"/>
+    <mass value="3.2882003107573594e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="base_plate_APC3_1">
+  <inertial>
+    <origin xyz="-3.3333333332441484e-07 3.3333333332441484e-07 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="base_plate_APE4_1">
+  <inertial>
+    <origin xyz="-3.3333333332441484e-07 -4.529598545378531e-18 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="base_plate_APC4_1">
+  <inertial>
+    <origin xyz="-3.3333333332441484e-07 -3.333333333382926e-07 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="base_plate_APE3_2">
+  <inertial>
+    <origin xyz="4.52959854537853e-18 -3.333333333348232e-07 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757326e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="base_plate_APM_2">
+  <inertial>
+    <origin xyz="5.937719349907654e-18 -4.400181444081978e-18 -8.673617379884035e-19" rpy="0 0 0"/>
+    <mass value="3.288200310757341e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<joint name="Rigid 11" type="fixed">
+  <origin xyz="-0.016667 0.016667 0.0049" rpy="0 0 0"/>
+  <parent link="base_plate_base_link"/>
+  <child link="base_plate_APC1_2"/>
+</joint>
+
+<joint name="Rigid 12" type="fixed">
+  <origin xyz="-0.016667 0.0 0.0049" rpy="0 0 0"/>
+  <parent link="base_plate_base_link"/>
+  <child link="base_plate_APE1_2"/>
+</joint>
+
+<joint name="Rigid 13" type="fixed">
+  <origin xyz="-0.016667 -0.016667 0.0049" rpy="0 0 0"/>
+  <parent link="base_plate_base_link"/>
+  <child link="base_plate_APC2_2"/>
+</joint>
+
+<joint name="Rigid 14" type="fixed">
+  <origin xyz="0.0 -0.016667 0.0049" rpy="0 0 0"/>
+  <parent link="base_plate_base_link"/>
+  <child link="base_plate_APE2_2"/>
+</joint>
+
+<joint name="Rigid 15" type="fixed">
+  <origin xyz="0.016667 -0.016667 0.0049" rpy="0 0 0"/>
+  <parent link="base_plate_base_link"/>
+  <child link="base_plate_APC3_1"/>
+</joint>
+
+<joint name="Rigid 16" type="fixed">
+  <origin xyz="0.016667 0.0 0.0049" rpy="0 0 0"/>
+  <parent link="base_plate_base_link"/>
+  <child link="base_plate_APE4_1"/>
+</joint>
+
+<joint name="Rigid 17" type="fixed">
+  <origin xyz="0.016667 0.016667 0.0049" rpy="0 0 0"/>
+  <parent link="base_plate_base_link"/>
+  <child link="base_plate_APC4_1"/>
+</joint>
+
+<joint name="Rigid 18" type="fixed">
+  <origin xyz="0.0 0.016667 0.0049" rpy="0 0 0"/>
+  <parent link="base_plate_base_link"/>
+  <child link="base_plate_APE3_2"/>
+</joint>
+
+<joint name="Rigid 19" type="fixed">
+  <origin xyz="0.0 0.0 0.0049" rpy="0 0 0"/>
+  <parent link="base_plate_base_link"/>
+  <child link="base_plate_APM_2"/>
+</joint>
+
+</robot>

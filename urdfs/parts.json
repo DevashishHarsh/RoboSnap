@@ -1,0 +1,122 @@
+[
+  {
+    "url": "urdfs/base_plate.urdf",
+    "title": "base_plate",
+    "icon_url": "static/images/icons/struct.svg",
+    "desc": "Support framework, ensure stability"
+  },
+  {
+    "url": "urdfs/beam_s.urdf",
+    "title": "beam_s",
+    "icon_url": "static/images/icons/struct.svg",
+    "desc": "Support framework, ensure stability"
+  },
+  {
+    "url": "urdfs/castor_l.urdf",
+    "title": "castor_l",
+    "icon_url": "static/images/icons/struct.svg",
+    "desc": "Support framework, ensure stability"
+  },
+  {
+    "url": "urdfs/cube_s.urdf",
+    "title": "cube_s",
+    "icon_url": "static/images/icons/struct.svg",
+    "desc": "Support framework, ensure stability"
+  },
+  {
+    "url": "urdfs/cuboid_s.urdf",
+    "title": "cuboid_s",
+    "icon_url": "static/images/icons/struct.svg",
+    "desc": "Support framework, ensure stability"
+  },
+  {
+    "url": "urdfs/gripper_a.urdf",
+    "title": "gripper_a",
+    "icon_url": "static/images/icons/act.svg",
+    "desc": "Convert energy into motion"
+  },
+  {
+    "url": "urdfs/imu_sens.urdf",
+    "title": "imu_sens",
+    "icon_url": "static/images/icons/sens.svg",
+    "desc": "Detect signals, gather data"
+  },
+  {
+    "url": "urdfs/pointsheet_c.urdf",
+    "title": "pointsheet_c",
+    "icon_url": "static/images/icons/conn.svg",
+    "desc": "Link components, enable interaction"
+  },
+  {
+    "url": "urdfs/prismatic_j.urdf",
+    "title": "prismatic_j",
+    "icon_url": "static/images/icons/joint.svg",
+    "desc": "Allow rotation, provide flexibility"
+  },
+  {
+    "url": "urdfs/propellor_l.urdf",
+    "title": "propellor_l",
+    "icon_url": "static/images/icons/struct.svg",
+    "desc": "Support framework, ensure stability"
+  },
+  {
+    "url": "urdfs/pyramid_s.urdf",
+    "title": "pyramid_s",
+    "icon_url": "static/images/icons/struct.svg",
+    "desc": "Support framework, ensure stability"
+  },
+  {
+    "url": "urdfs/revolute_roll_j.urdf",
+    "title": "revolute_roll_j",
+    "icon_url": "static/images/icons/joint.svg",
+    "desc": "Allow rotation, provide flexibility"
+  },
+  {
+    "url": "urdfs/revolute_yaw_j.urdf",
+    "title": "revolute_yaw_j",
+    "icon_url": "static/images/icons/joint.svg",
+    "desc": "Allow rotation, provide flexibility"
+  },
+  {
+    "url": "urdfs/sphere_s.urdf",
+    "title": "sphere_s",
+    "icon_url": "static/images/icons/struct.svg",
+    "desc": "Support framework, ensure stability"
+  },
+  {
+    "url": "urdfs/spider_feet_l.urdf",
+    "title": "spider_feet_l",
+    "icon_url": "static/images/icons/struct.svg",
+    "desc": "Support framework, ensure stability"
+  },
+  {
+    "url": "urdfs/triangle_s.urdf",
+    "title": "triangle_s",
+    "icon_url": "static/images/icons/struct.svg",
+    "desc": "Support framework, ensure stability"
+  },
+  {
+    "url": "urdfs/tubec_c.urdf",
+    "title": "tubec_c",
+    "icon_url": "static/images/icons/conn.svg",
+    "desc": "Link components, enable interaction"
+  },
+  {
+    "url": "urdfs/tubes_c.urdf",
+    "title": "tubes_c",
+    "icon_url": "static/images/icons/conn.svg",
+    "desc": "Link components, enable interaction"
+  },
+  {
+    "url": "urdfs/ultra_sens.urdf",
+    "title": "ultra_sens",
+    "icon_url": "static/images/icons/sens.svg",
+    "desc": "Detect signals, gather data"
+  },
+  {
+    "url": "urdfs/wheel_l.urdf",
+    "title": "wheel_l",
+    "icon_url": "static/images/icons/struct.svg",
+    "desc": "Support framework, ensure stability"
+  }
+]

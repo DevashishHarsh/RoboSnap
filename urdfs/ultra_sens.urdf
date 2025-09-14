@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<robot name="ultra_sens">
+
+<link name="ultra_sens_base_link">
+  <inertial>
+    <origin xyz="1.0500258947766955e-13 3.548583625470414e-19 0.001452898678986947" rpy="0 0 0"/>
+    <mass value="0.0015349875582670238"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/ultra_sens_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/ultra_sens_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="ultra_sens_AP_1">
+  <inertial>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <mass value="4.110250388446646e-06"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<joint name="Rigid 1" type="fixed">
+  <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  <parent link="ultra_sens_base_link"/>
+  <child link="ultra_sens_AP_1"/>
+</joint>
+
+</robot>

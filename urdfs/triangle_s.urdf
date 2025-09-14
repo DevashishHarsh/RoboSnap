@@ -1,0 +1,105 @@
+<?xml version="1.0" ?>
+<robot name="triangle_s">
+
+<link name="triangle_s_base_link">
+  <inertial>
+    <origin xyz="0.013333333334170227 0.013333333334170229 0.015000000000000003" rpy="0 0 0"/>
+    <mass value="0.18839876692488344"/>
+    <inertia ixx="3.1e-05" iyy="3.1e-05" izz="3.3e-05" ixy="8e-06" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/triangle_s_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/triangle_s_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="triangle_s_APB_1">
+  <inertial>
+    <origin xyz="0.0 1.3322676295501878e-17 0.0" rpy="0 0 0"/>
+    <mass value="3.288200310757356e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="triangle_s_APHy_1">
+  <inertial>
+    <origin xyz="0.0 0.0 5.204170427930421e-18" rpy="0 0 0"/>
+    <mass value="3.288200310757356e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="triangle_s_APH_1">
+  <inertial>
+    <origin xyz="0.0 6.938893903907228e-18 -2.6020852139652106e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757356e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="triangle_s_APS1_1">
+  <inertial>
+    <origin xyz="2.054660535547731e-07 2.0546605353742586e-07 -2.1412992906588713e-18" rpy="0 0 0"/>
+    <mass value="3.288200310757356e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="triangle_s_APS2_1">
+  <inertial>
+    <origin xyz="2.0546605353742586e-07 2.0546605353742586e-07 -1.0408340855860843e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757356e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<joint name="Rigid 1" type="fixed">
+  <origin xyz="0.02 0.0 0.015" rpy="0 0 0"/>
+  <parent link="triangle_s_base_link"/>
+  <child link="triangle_s_APB_1"/>
+</joint>
+
+<joint name="Rigid 2" type="fixed">
+  <origin xyz="0.02 0.02 0.015" rpy="0 0 0"/>
+  <parent link="triangle_s_base_link"/>
+  <child link="triangle_s_APHy_1"/>
+</joint>
+
+<joint name="Rigid 3" type="fixed">
+  <origin xyz="0.0 0.02 0.015" rpy="0 0 0"/>
+  <parent link="triangle_s_base_link"/>
+  <child link="triangle_s_APH_1"/>
+</joint>
+
+<joint name="Rigid 4" type="fixed">
+  <origin xyz="0.013333 0.013333 0.0001" rpy="0 0 0"/>
+  <parent link="triangle_s_base_link"/>
+  <child link="triangle_s_APS1_1"/>
+</joint>
+
+<joint name="Rigid 5" type="fixed">
+  <origin xyz="0.013333 0.013333 0.0299" rpy="0 0 0"/>
+  <parent link="triangle_s_base_link"/>
+  <child link="triangle_s_APS2_1"/>
+</joint>
+
+</robot>

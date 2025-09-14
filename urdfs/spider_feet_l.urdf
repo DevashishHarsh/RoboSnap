@@ -1,0 +1,144 @@
+<?xml version="1.0" ?>
+<robot name="spider_feet_l">
+
+<link name="spider_feet_l_base_link">
+  <inertial>
+    <origin xyz="0.0006389422779993786 -3.5440479720288525e-19 9.279166287235361e-08" rpy="0 0 0"/>
+    <mass value="9.60595016905366e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/spider_feet_l_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/spider_feet_l_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="spider_feet_l_farm_1">
+  <inertial>
+    <origin xyz="0.0027497367858007066 0.0 0.0015875615341452867" rpy="0 0 0"/>
+    <mass value="0.00016960973489184238"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.001517 -0.0 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/spider_feet_l_farm_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.001517 -0.0 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/spider_feet_l_farm_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="spider_feet_l_sarm_1">
+  <inertial>
+    <origin xyz="0.0028906645717420385 0.0 -0.0016695684877066313" rpy="0 0 0"/>
+    <mass value="6.608259707145152e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.00758 -0.0 -0.0035" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/spider_feet_l_sarm_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.00758 -0.0 -0.0035" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/spider_feet_l_sarm_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="spider_feet_l_tarm_1">
+  <inertial>
+    <origin xyz="4.4210894886015373e-07 -1.3447745623952203e-19 -0.0037601183496128727" rpy="0 0 0"/>
+    <mass value="6.328932218090162e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.013641 -0.0 1e-06" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/spider_feet_l_tarm_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.013641 -0.0 1e-06" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/spider_feet_l_tarm_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="spider_feet_l_APP_1">
+  <inertial>
+    <origin xyz="2.7755575615628914e-19 0.0 0.0" rpy="0 0 0"/>
+    <mass value="4.110250388446644e-06"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="spider_feet_l_AP_1">
+  <inertial>
+    <origin xyz="4.421089492417929e-07 4.163336342344337e-19 4.2417633978886204e-07" rpy="0 0 0"/>
+    <mass value="4.110250388446644e-06"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<joint name="Revolute 1" type="revolute">
+  <origin xyz="0.001517 0.0 0.0" rpy="0 0 0"/>
+  <parent link="spider_feet_l_base_link"/>
+  <child link="spider_feet_l_farm_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit upper="2.094395" lower="-1.047198" effort="100" velocity="100"/>
+</joint>
+
+<joint name="Revolute 2" type="revolute">
+  <origin xyz="0.006063 0.0 0.0035" rpy="0 0 0"/>
+  <parent link="spider_feet_l_farm_1"/>
+  <child link="spider_feet_l_sarm_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit upper="0.785398" lower="-1.047198" effort="100" velocity="100"/>
+</joint>
+
+<joint name="Revolute 3" type="revolute">
+  <origin xyz="0.006061 0.0 -0.003501" rpy="0 0 0"/>
+  <parent link="spider_feet_l_sarm_1"/>
+  <child link="spider_feet_l_tarm_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit upper="0.698132" lower="-1.047198" effort="100" velocity="100"/>
+</joint>
+
+<joint name="Rigid 4" type="fixed">
+  <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  <parent link="spider_feet_l_base_link"/>
+  <child link="spider_feet_l_APP_1"/>
+</joint>
+
+<joint name="Rigid 5" type="fixed">
+  <origin xyz="0.0 0.0 -0.007" rpy="0 0 0"/>
+  <parent link="spider_feet_l_tarm_1"/>
+  <child link="spider_feet_l_AP_1"/>
+</joint>
+
+</robot>

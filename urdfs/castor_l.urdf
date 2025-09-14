@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<robot name="castor_l">
+
+<link name="castor_l_base_link">
+  <inertial>
+    <origin xyz="4.662907826978475e-15 1.4773959424339048e-18 -0.00346591338245523" rpy="0 0 0"/>
+    <mass value="0.0005530370929806647"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/castor_l_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/castor_l_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="castor_l_castor_wheel_1">
+  <inertial>
+    <origin xyz="3.6159422678316845e-13 0.001500000000000001 -5.658928187157741e-14" rpy="0 0 0"/>
+    <mass value="0.0009063102106525242"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.0 0.0015 0.0065" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/castor_l_castor_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.0 0.0015 0.0065" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/castor_l_castor_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="castor_l_AP_1">
+  <inertial>
+    <origin xyz="2.6179938779914963e-11 2.6179938779914963e-11 2.6179938779914963e-11" rpy="0 0 0"/>
+    <mass value="4.110250388446648e-09"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<joint name="Revolute 1" type="continuous">
+  <origin xyz="0.0 -0.0015 -0.0065" rpy="0 0 0"/>
+  <parent link="castor_l_base_link"/>
+  <child link="castor_l_castor_wheel_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+</joint>
+
+<joint name="Rigid 3" type="fixed">
+  <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  <parent link="castor_l_base_link"/>
+  <child link="castor_l_AP_1"/>
+</joint>
+
+</robot>

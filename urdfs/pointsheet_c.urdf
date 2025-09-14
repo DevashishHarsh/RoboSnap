@@ -1,0 +1,185 @@
+<?xml version="1.0" ?>
+<robot name="pointsheet_c">
+
+<link name="pointsheet_c_base_link">
+  <inertial>
+    <origin xyz="-1.2167633160835552e-15 -3.0531133177191805e-18 -3.73210687101555e-07" rpy="0 0 0"/>
+    <mass value="0.014124451161975603"/>
+    <inertia ixx="1e-06" iyy="1e-06" izz="2e-06" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/pointsheet_c_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/pointsheet_c_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="pointsheet_c_APC1_1">
+  <inertial>
+    <origin xyz="-2.0816681711721685e-17 0.0 4.0766001685454967e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="pointsheet_c_APE2_1">
+  <inertial>
+    <origin xyz="4.023538537804426e-18 0.0 4.0766001685454967e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="pointsheet_c_APC2_1">
+  <inertial>
+    <origin xyz="2.42861286636753e-17 -3.469446951953614e-18 1.8539857149502126e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="pointsheet_c_APC3_1">
+  <inertial>
+    <origin xyz="2.2551405187698492e-17 -3.3669994270241256e-18 3.415236843329339e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="pointsheet_c_APC4_1">
+  <inertial>
+    <origin xyz="4.5102810375396984e-17 8.673617379884035e-18 3.859759734048396e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="pointsheet_c_APE1_1">
+  <inertial>
+    <origin xyz="2.2869956771651794e-18 6.938893903907228e-18 3.415236843329339e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="pointsheet_c_APP_1">
+  <inertial>
+    <origin xyz="-2.0816681711721685e-17 8.673617379884035e-18 2.970713952610282e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="pointsheet_c_APE3_1">
+  <inertial>
+    <origin xyz="1.5761551206637929e-18 -7.807891525524758e-18 4.3042826247674526e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="pointsheet_c_APE4_1">
+  <inertial>
+    <origin xyz="-2.0816681711721685e-17 -3.3669994270241318e-18 3.859759734048396e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<link name="pointsheet_c_APM_1">
+  <inertial>
+    <origin xyz="3.032274858957919e-18 -1.668967572252601e-17 3.903127820947816e-17" rpy="0 0 0"/>
+    <mass value="3.288200310757325e-05"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<joint name="Rigid 11" type="fixed">
+  <origin xyz="0.01 -0.01 0.0009" rpy="0 0 0"/>
+  <parent link="pointsheet_c_base_link"/>
+  <child link="pointsheet_c_APC1_1"/>
+</joint>
+
+<joint name="Rigid 12" type="fixed">
+  <origin xyz="0.0 -0.01 0.0009" rpy="0 0 0"/>
+  <parent link="pointsheet_c_base_link"/>
+  <child link="pointsheet_c_APE2_1"/>
+</joint>
+
+<joint name="Rigid 13" type="fixed">
+  <origin xyz="-0.01 -0.01 0.0009" rpy="0 0 0"/>
+  <parent link="pointsheet_c_base_link"/>
+  <child link="pointsheet_c_APC2_1"/>
+</joint>
+
+<joint name="Rigid 14" type="fixed">
+  <origin xyz="-0.01 0.0 0.0009" rpy="0 0 0"/>
+  <parent link="pointsheet_c_base_link"/>
+  <child link="pointsheet_c_APC3_1"/>
+</joint>
+
+<joint name="Rigid 15" type="fixed">
+  <origin xyz="-0.01 0.01 0.0009" rpy="0 0 0"/>
+  <parent link="pointsheet_c_base_link"/>
+  <child link="pointsheet_c_APC4_1"/>
+</joint>
+
+<joint name="Rigid 16" type="fixed">
+  <origin xyz="0.0 0.01 0.0009" rpy="0 0 0"/>
+  <parent link="pointsheet_c_base_link"/>
+  <child link="pointsheet_c_APE1_1"/>
+</joint>
+
+<joint name="Rigid 17" type="fixed">
+  <origin xyz="0.01 0.01 0.0009" rpy="0 0 0"/>
+  <parent link="pointsheet_c_base_link"/>
+  <child link="pointsheet_c_APP_1"/>
+</joint>
+
+<joint name="Rigid 18" type="fixed">
+  <origin xyz="0.0 0.0 0.0009" rpy="0 0 0"/>
+  <parent link="pointsheet_c_base_link"/>
+  <child link="pointsheet_c_APE3_1"/>
+</joint>
+
+<joint name="Rigid 19" type="fixed">
+  <origin xyz="0.01 0.0 0.0009" rpy="0 0 0"/>
+  <parent link="pointsheet_c_base_link"/>
+  <child link="pointsheet_c_APE4_1"/>
+</joint>
+
+<joint name="Rigid 20" type="fixed">
+  <origin xyz="0.0 0.0 -0.001" rpy="0 0 0"/>
+  <parent link="pointsheet_c_base_link"/>
+  <child link="pointsheet_c_APM_1"/>
+</joint>
+
+</robot>
