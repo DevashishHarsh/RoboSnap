@@ -212,15 +212,31 @@ function addSelectionOutline(instanceId) {
   outlineGroup.name = 'selection_outline_' + instanceId;
   
   inst.rootGroup.traverse(child => {
-    if (child.isMesh && child.geometry) {
+    if (child.isMesh && child.geometry && child.userData && child.userData.instanceId === instanceId) {
       try {
         const edges = new THREE.EdgesGeometry(child.geometry);
         const outline = new THREE.LineSegments(edges, outlineMaterial.clone());
         
+        // Get world matrices
+        child.updateWorldMatrix(true, true);
+        inst.rootGroup.updateWorldMatrix(true, true);
         
-        outline.position.copy(child.position);
-        outline.rotation.copy(child.rotation);
-        outline.scale.copy(child.scale);
+        // Calculate transform relative to rootGroup
+        const relativeMatrix = new THREE.Matrix4()
+          .multiplyMatrices(
+            inst.rootGroup.matrixWorld.clone().invert(),
+            child.matrixWorld
+          );
+        
+        // Apply the relative transform
+        const pos = new THREE.Vector3();
+        const quat = new THREE.Quaternion();
+        const scale = new THREE.Vector3();
+        relativeMatrix.decompose(pos, quat, scale);
+        
+        outline.position.copy(pos);
+        outline.quaternion.copy(quat);
+        outline.scale.copy(scale);
         
         outline.renderOrder = 999;
         outline.frustumCulled = false;
@@ -232,7 +248,6 @@ function addSelectionOutline(instanceId) {
   });
   
   if (outlineGroup.children.length > 0) {
-    
     inst.rootGroup.add(outlineGroup);
     selectedInstanceOutline = outlineGroup;
   }
