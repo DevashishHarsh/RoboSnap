@@ -17,7 +17,7 @@ RoboSnap provides a visual, low-friction path from CAD parts to a simulation-rea
 URDF (Unified Robot Description Format) is an XML-based format widely used in the ROS (Robot Operating System) ecosystem to describe a robot’s physical structure: links (rigid bodies), joints (how bodies are connected and allowed to move), visual geometry for rendering, and inertial parameters used for simulation. A correct URDF lets simulation tools and controllers understand the robot’s kinematics, dynamics, and appearance so you can visualize, test, and run algorithms against a virtual model.
 
 ## Comparison with existing Softwares ( Fusion 360 )
---- Yet to be uploaded ---
+[Watch the Video of a Simple Robot Formation](/static/images/Fusion_RoboSnap.mp4)
 
 ## Known limitations
 1. Approximate inertial values: current inertial entries are conservative placeholders; for high-fidelity dynamics you should replace these with CAD-derived inertia.
