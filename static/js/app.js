@@ -522,13 +522,13 @@ function findNearestMeshByScreenDistance(screenX, screenY, maxDistancePixels = 5
   });
 })();
 
-function getSpawnPositionInFrontOfCamera(distance=0.6){
+function getSpawnPositionInFrontOfCamera(distance=0.1){
   const d = new THREE.Vector3(); camera.getWorldDirection(d);
   const p = new THREE.Vector3(); p.copy(camera.position).add(d.multiplyScalar(distance));
   return { x:p.x, y:p.y, z:p.z };
 }
 
-function getSpawnPositionFromEvent(e, distance = 0.05){
+function getSpawnPositionFromEvent(e, distance = 0.1){
   const rect = canvas.getBoundingClientRect();
   const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
   const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
