@@ -21,8 +21,8 @@ export default function initInfoModule({ scene, camera, renderer, canvas, instan
   const markerOptions = {
     color: 0xffff00,
     opacity: 0.85,
-    size: 0.02,
-    depthTest: false 
+    size: 0.02,        
+    depthTest: false
   };
 
   function createModal(){ 
@@ -95,6 +95,48 @@ export default function initInfoModule({ scene, camera, renderer, canvas, instan
   }
 
   function computeAssemblyVolumeAndCOM(){ let totalVol = 0; const weighted = new THREE.Vector3(0,0,0); for (const id in instances){ const inst = instances[id]; const { volume, com } = computeInstanceVolumeAndCOM(inst); if (!volume || volume <= 0) continue; totalVol += volume; weighted.addScaledVector(com, volume); } if (totalVol <= 0) return { volume: 0, com: new THREE.Vector3() }; const com = weighted.divideScalar(totalVol); return { volume: totalVol, com }; }
+  
+  function calculateAttachSphereSize(rootGroup) {
+  if (!rootGroup) return 0.001;
+  try { rootGroup.updateWorldMatrix(true, true); } catch (e) {}
+
+  const box = new THREE.Box3().setFromObject(rootGroup);
+  if (box.isEmpty()) return 0.001;
+
+  const size = box.getSize(new THREE.Vector3());
+  const avgDimension = (size.x + size.y + size.z) / 3;
+
+  let sphereSize = avgDimension/5;
+  sphereSize = Math.max(0.0005, sphereSize);
+
+  return sphereSize;
+  }
+
+  function calculateAssemblyAttachSphereSize(instancesMap) {
+    if (!instancesMap || Object.keys(instancesMap).length === 0) return 0.001;
+
+    try { scene.updateMatrixWorld(true); } catch (e) {}
+
+    const box = new THREE.Box3();
+    let any = false;
+
+    for (const id in instancesMap) {
+      const inst = instancesMap[id];
+      if (!inst || !inst.rootGroup) continue;
+      try { inst.rootGroup.updateWorldMatrix(true, true); } catch (e) {}
+      box.expandByObject(inst.rootGroup);
+      any = true;
+    }
+
+    if (!any || box.isEmpty()) return 0.001;
+
+    const size = box.getSize(new THREE.Vector3());
+    const avgDimension = (size.x + size.y + size.z) / 3;
+    let sphereSize = avgDimension / 5;
+    sphereSize = Math.max(0.0005, sphereSize);
+
+    return sphereSize;
+  }
 
   
   function createMarkerMaterial(){
@@ -107,20 +149,34 @@ export default function initInfoModule({ scene, camera, renderer, canvas, instan
     });
   }
 
-  function placeMarkerAt(worldVec){
-    removeMarker();
-    
-    const g = new THREE.SphereGeometry(markerOptions.size, 12, 10);
-    const m = createMarkerMaterial();
-    const s = new THREE.Mesh(g, m);
-    s.name = 'rb-info-marker';
-    s.position.copy(worldVec);
-    s.renderOrder = 99999;
-    s.frustumCulled = false;
-    
-    scene.add(s);
-    currentMarker = s;
+  function placeMarkerAt(worldVec, rootGroup = null){
+  removeMarker();
+
+  let size = markerOptions.size;
+  try {
+    if (runMode) {
+      size = calculateAssemblyAttachSphereSize(instances) || size;
+      console.log('Assembly');
+    } else {
+      size = calculateAttachSphereSize(rootGroup) || size;
+      console.log('Instance');
+    }
+  } catch(e) {
+    size = markerOptions.size || 0.02;
   }
+
+  const g = new THREE.SphereGeometry(size, 12, 10);
+  const m = createMarkerMaterial();
+  const s = new THREE.Mesh(g, m);
+  s.name = 'rb-info-marker';
+  s.position.copy(worldVec);
+  s.renderOrder = 99999;
+  s.frustumCulled = false;
+
+  scene.add(s);
+  currentMarker = s;
+}
+
 
   function removeMarker(){ if (currentMarker){ try{ scene.remove(currentMarker); if (currentMarker.geometry) currentMarker.geometry.dispose(); if (currentMarker.material) currentMarker.material.dispose(); }catch(e){} currentMarker = null; } }
 
@@ -165,7 +221,7 @@ export default function initInfoModule({ scene, camera, renderer, canvas, instan
 
     
     const sel = container.querySelector('.rb-inline-material'); const massDiv = container.querySelector('.rb-mass'); const comDiv = container.querySelector('.rb-com');
-    function update(){ const mat = sel.value; const rho = densities[mat] || 1000; const mass = volume * rho; massDiv.innerHTML = `Mass: <strong>${formatNumber(mass,4)} kg</strong>`; if (volume>0 && com){ comDiv.innerHTML = `COM: <strong>${formatNumber(com.x,4)} m, ${formatNumber(com.y,4)} m, ${formatNumber(com.z,4)} m</strong>`; placeMarkerAt(com); } }
+    function update(){ const mat = sel.value; const rho = densities[mat] || 1000; const mass = volume * rho; massDiv.innerHTML = `Mass: <strong>${formatNumber(mass,4)} kg</strong>`; if (volume>0 && com){ comDiv.innerHTML = `COM: <strong>${formatNumber(com.x,4)} m, ${formatNumber(com.y,4)} m, ${formatNumber(com.z,4)} m</strong>`; placeMarkerAt(com, inst.rootGroup); } }
     sel.addEventListener('change', update); update();
 
     return container;

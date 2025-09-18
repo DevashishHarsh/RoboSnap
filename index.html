@@ -11,13 +11,23 @@
     html,body { height:100%; margin:0; background: radial-gradient(1200px 600px at 10% 10%, rgba(255,59,59,0.03), transparent), linear-gradient(180deg, rgba(0,0,0,0.85), var(--bg)); }
 
     .welcome-wrap {
-      min-height: calc(100vh - var(--topbar-height));
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-section {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 32px;
-      position:relative;
-      overflow:hidden;
+      width: 100%;
+      z-index: 2;
+      position: relative;
     }
 
     .welcome-card {
@@ -34,7 +44,124 @@
       gap: 22px;
       text-align:center;
       position:relative;
+    }
+
+    .help-section {
+      flex: 1;
+      width: 100%;
+      padding: 20px 32px 120px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
       z-index: 2;
+    }
+
+    .help-content {
+      width: min(1200px, 94vw);
+      max-width: 1200px;
+      background: rgba(255,255,255,0.01);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 32px;
+      backdrop-filter: blur(10px);
+    }
+
+    .help-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .help-item {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      margin-bottom: 48px;
+      padding: 24px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .help-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .help-text {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .help-number {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      text-align: center;
+      line-height: 32px;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .help-description {
+      font-size: 16px;
+      color: #dfe9ed;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .help-visual {
+      flex-shrink: 0;
+      width: 280px;
+      height: 200px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 2px dashed rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.3);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .help-visual img,
+    .help-visual video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .fixed-start-btn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 1000;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    .github-link {
+      text-align: center;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .github-link a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .github-link a:hover {
+      text-decoration: underline;
     }
 
     .welcome-logo {
@@ -90,26 +217,180 @@
       .welcome-logo { font-size: 26px; gap:12px; }
       .welcome-logo img { height:64px; }
       .start-large { padding: 12px 26px; font-size:18px; }
+      .help-item {
+        flex-direction: column !important;
+        gap: 16px;
+      }
+      .help-item:nth-child(even) {
+        flex-direction: column !important;
+      }
+      .help-visual {
+        width: 100%;
+        max-width: 280px;
+      }
+      .fixed-start-btn {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        width: calc(100% - 40px);
+      }
     }
   </style>
 </head>
 <body>
   <div class="welcome-wrap">
-    <div class="welcome-card" role="main" aria-labelledby="welcome-title">
-      <div class="welcome-logo" id="welcome-title">
-        <img src="static/images/logo.png" alt="RoboSnap logo">
-        <div style="text-align:left;">
-          <div style="font-size:32px">RoboSnap</div>
-          <div class="welcome-sub">assemble • snap • export</div>
+    <div class="welcome-section">
+      <div class="welcome-card" role="main" aria-labelledby="welcome-title">
+        <div class="welcome-logo" id="welcome-title">
+          <img src="static/images/logo.png" alt="RoboSnap logo">
+          <div style="text-align:left;">
+            <div style="font-size:32px">RoboSnap</div>
+            <div class="welcome-sub">assemble • snap • export</div>
+          </div>
+        </div>
+
+        <p style="max-width:720px; color:#dfe9ed; margin:0 0 8px 0;">
+          Welcome! Use parts from the left column to assemble robots, snap attachments with the attach points, and export a URDF. Click <strong>Start building</strong> to open the editor.
+        </p>
+      </div>
+    </div>
+
+    <div class="help-section">
+      <div class="help-content">
+        <h2 class="help-title">How to Use RoboSnap</h2>
+
+        <div class="help-item">
+          <div class="help-text">
+            <div class="help-number">1</div>
+            <p class="help-description">
+              <strong>Adding Parts:</strong> Drag and drop parts from the left panel directly into the 3D workspace to start building your robot assembly.
+            </p>
+          </div>
+          <div class="help-visual">
+            <img src="static/images/help/drag-drop.gif" alt="Selection demo" style="display: none;" onload="this.style.display = 'block';">
+          </div>
+        </div>
+
+        <div class="help-item">
+          <div class="help-text">
+            <div class="help-number">2</div>
+            <p class="help-description">
+              <strong>Selection Controls:</strong> Left click to select parts, right click to deselect. Selected parts will be highlighted with a red outline.
+            </p>
+          </div>
+          <div class="help-visual">
+            <img src="static/images/help/selection.gif" alt="Drag and drop demo" style="display: none;" onload="this.style.display = 'block';">
+          </div>
+        </div>
+
+        <div class="help-item">
+          <div class="help-text">
+            <div class="help-number">3</div>
+            <p class="help-description">
+              <strong>Transform Controls:</strong> Use G (move), S (scale), and R (rotate) keys to position parts. Avoid using these after attaching parts together.
+            </p>
+          </div>
+          <div class="help-visual">
+            <img src="static/images/help/transforms.gif" alt="Transform controls demo" style="display: none;" onload="this.style.display = 'block';">
+          </div>
+        </div>
+
+        <div class="help-item">
+          <div class="help-text">
+            <div class="help-number">4</div>
+            <p class="help-description">
+              <strong>Snapping Parts:</strong> Select a part and click on red attach points (they turn green when ready). Then click on another part's red attach point to snap them together.
+            </p>
+          </div>
+          <div class="help-visual">
+            <img src="static/images/help/snapping.gif" alt="Part snapping demo" style="display: none;" onload="this.style.display = 'block';">
+          </div>
+        </div>
+
+        <div class="help-item">
+          <div class="help-text">
+            <div class="help-number">5</div>
+            <p class="help-description">
+              <strong>Joint Adjustment:</strong> Use the properties panel to fine-tune the orientation of snapped joints. Use "Edit joint" to modify previous orientations.
+            </p>
+          </div>
+          <div class="help-visual">
+            <img src="static/images/help/properties.gif" alt="Properties panel demo" style="display: none;" onload="this.style.display = 'block';">
+          </div>
+        </div>
+
+        <div class="help-item">
+          <div class="help-text">
+            <div class="help-number">6</div>
+            <p class="help-description">
+              <strong>Object Information:</strong> Use the info tab to get detailed information about the bounding box and dimensions of selected objects.
+            </p>
+          </div>
+          <div class="help-visual">
+            <img src="static/images/help/info-tab.gif" alt="Info tab demo" style="display: none;" onload="this.style.display = 'block';">
+          </div>
+        </div>
+
+        <div class="help-item">
+          <div class="help-text">
+            <div class="help-number">7</div>
+            <p class="help-description">
+              <strong>Duplication:</strong> Use "D" to spawn a duplicate of the selected part at your cursor location. Left click to place it.
+            </p>
+          </div>
+          <div class="help-visual">
+            <img src="static/images/help/duplicate.gif" alt="Info tab demo" style="display: none;" onload="this.style.display = 'block';">
+          </div>
+        </div>
+
+        <div class="help-item">
+          <div class="help-text">
+            <div class="help-number">8</div>
+            <p class="help-description">
+              <strong>Unlink:</strong> Unlink a child from the parent link. Use Delete key to remove parts from the scene.
+            </p>
+          </div>
+          <div class="help-visual">
+            <img src="static/images/help/unlink.gif" alt="Info tab demo" style="display: none;" onload="this.style.display = 'block';">
+          </div>
+        </div>
+
+        <div class="help-item">
+          <div class="help-text">
+            <div class="help-number">9</div>
+            <p class="help-description">
+              <strong>Visualization Mode:</strong> Use the visualize button to see the complete assembly and use the sliders to test joint movement.
+            </p>
+          </div>
+          <div class="help-visual">
+            <img src="static/images/help/visualize.gif" alt="Visualization mode demo" style="display: none;" onload="this.style.display = 'block';">
+          </div>
+        </div>
+
+        <div class="help-item">
+          <div class="help-text">
+            <div class="help-number">10</div>
+            <p class="help-description">
+              <strong>Export Assembly:</strong> Save your assembly as a complete ROS2 package with URDF, launch files, and mesh files. <em>(Experimental feature)</em>
+            </p>
+          </div>
+          <div class="help-visual">
+            <img src="static/images/help/export.gif" alt="Export demo" style="display: none;" onload="this.style.display = 'block';">
+          </div>
+        </div>
+
+        <div class="github-link">
+          <p style="color: var(--muted); margin-bottom: 8px;">
+            For more information and source code:
+          </p>
+          <a href="https://github.com/DevashishHarsh" target="_blank" rel="noopener noreferrer">
+            Visit the GitHub Repository
+          </a>
         </div>
       </div>
-
-      <p style="max-width:720px; color:#dfe9ed; margin:0 0 8px 0;">
-        Welcome! Use parts from the left column to assemble robots, snap attachments with the attach points, and export a URDF. Click <strong>Start building</strong> to open the editor.
-      </p>
-
-      <button id="start-btn" class="start-large" aria-label="Start building">Start building</button>
     </div>
+
+    <button id="start-btn" class="start-large fixed-start-btn" aria-label="Start building">Start building</button>
 
     <div class="particles" aria-hidden="true">
       <!-- decorative particles: JS will place a few -->
