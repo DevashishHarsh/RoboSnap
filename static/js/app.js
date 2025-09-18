@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
-import { buildURDF,getMeshFiles } from './exporter.js';
+import { buildURDF, getMeshFiles, generatePackageXml, generateCMakeListsTxt, generateDisplayLaunch, generateGazeboLaunch, generateRvizConfig, generateJointStateConfig, generateXacroFile, generateGazeboFile } from './exporter.js';
 import initInfoModule from './info.js';
 
 const manifestPath = 'urdfs/parts.json';
@@ -885,12 +885,7 @@ canvas.addEventListener('pointerdown', function(e){
     selectInstance(targetObject.userData.instanceId);
     postAttachRotationMode = false;
     jointEditMode = null;
-  } else {
-    deselectInstance();
-    transformControl.visible = false; 
-    postAttachRotationMode = false;
-    jointEditMode = null;
-    }
+  }
 }, true);
 
 function handleSphereClick(sphere, event){
@@ -1967,17 +1962,35 @@ async function saveAssemblyAsZip(filenameWithoutExt = 'assembly') {
 
     const zip = new JSZip();
     const baseName = (filenameWithoutExt || 'assembly').replace(/\s+/g, '_');
-    zip.file(baseName + '.urdf', urdf);
+    const urdfFileName = baseName + '.urdf';
 
+    zip.file('CMakeLists.txt', generateCMakeListsTxt(baseName));
+    zip.file('package.xml', generatePackageXml(baseName, `URDF package for ${baseName}`));
+
+    const urdfFolder = zip.folder('urdf');
+    urdfFolder.file(urdfFileName, urdf);
+    urdfFolder.file(baseName + '.xacro', generateXacroFile(baseName, urdfFileName));
+    urdfFolder.file(baseName + '.gazebo', generateGazeboFile(baseName, assemblyData));
+    
     if (meshNames.length) {
-      const folder = zip.folder('meshes');
+      const meshFolder = zip.folder('meshes');
       meshNames.forEach(name => {
-        folder.file(name, fetched[name]);
+        meshFolder.file(name, fetched[name]);
       });
     }
 
+    const launchFolder = zip.folder('launch');
+    launchFolder.file('display.launch.py', generateDisplayLaunch(baseName, urdfFileName));
+    launchFolder.file('gazebo.launch.py', generateGazeboLaunch(baseName, urdfFileName));
+
+    const rvizFolder = zip.folder('rviz');
+    rvizFolder.file('urdf.rviz', generateRvizConfig());
+
+    const configFolder = zip.folder('config');
+    configFolder.file('joint_state_publisher.yaml', generateJointStateConfig());
+
     const content = await zip.generateAsync({ type: 'blob' });
-    saveAs(content, baseName + '.zip');
+    saveAs(content, baseName + '_ros2_package.zip');
   } catch (err) {
     console.error('saveAssemblyAsZip unexpected error', err);
     alert('Export failed: ' + (err && err.message ? err.message : String(err)));
@@ -2021,7 +2034,7 @@ function showSaveModal(){
   box.appendChild(title);
 
   const hint = document.createElement('div');
-  hint.textContent = 'This will generate a .urdf and a meshes/ folder (STL files referenced by the loaded URDFs).';
+  hint.textContent = 'This will generate a complete ROS2 package with URDF, launch files, RViz config, and meshes.';
   hint.style.fontSize = '12px';
   hint.style.opacity = '0.85';
   hint.style.marginBottom = '12px';
@@ -2041,7 +2054,7 @@ function showSaveModal(){
   const row = document.createElement('div'); row.style.display='flex'; row.style.gap='8px'; row.style.marginTop='12px';
   const cancel = document.createElement('button'); cancel.textContent = 'Cancel'; cancel.style.background = 'transparent'; cancel.style.border = '1px solid rgba(255,255,255,0.06)'; cancel.style.color='#fff';
   cancel.addEventListener('click', ()=>{ if(overlay.parentNode) overlay.parentNode.removeChild(overlay); suppressShortcutsOnModal=false; });
-  const go = document.createElement('button'); go.textContent = 'Save URDF + meshes (zip)';
+  const go = document.createElement('button'); go.textContent = 'Save ROS2 Package (zip)';
   go.addEventListener('click', async () => {
     const name = (input.value || 'assembly').trim().replace(/\s+/g,'_');
     try {

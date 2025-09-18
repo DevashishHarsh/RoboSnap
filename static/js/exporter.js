@@ -610,6 +610,26 @@ export async function buildURDF(assemblyData) {
 
   
   const parts = [];
+  // Find the root instance and its root link for renaming to base_link
+  let rootInstanceId = null;
+  let originalRootLinkName = null;
+  for (const inst of instances) {
+    if (!inst.parentId) {
+      rootInstanceId = inst.id;
+      originalRootLinkName = inst.rootLinkName || (inst.links && inst.links[0] && inst.links[0].name);
+      break;
+    }
+  }
+
+  const rootLinkFullName = rootInstanceId ? `${rootInstanceId}__${originalRootLinkName}` : null;
+
+  // Helper function to get display name for links
+  function getLinkDisplayName(fullName) {
+    if (fullName === rootLinkFullName) {
+      return 'base_link';
+    }
+    return fullName;
+  }
   parts.push('<?xml version="1.0"?>\n');
   parts.push('<robot name="robot_assembly">\n\n');
 
@@ -628,7 +648,7 @@ export async function buildURDF(assemblyData) {
     if (!inst.links) continue;
     for (const link of inst.links) {
       if (!linkIncluded.has(link.fullName)) continue;
-      parts.push(`  <link name="${link.fullName}">\n`);
+      parts.push(`  <link name="${getLinkDisplayName(link.fullName)}">\n`);
       parts.push('    <inertial>\n');
       parts.push('      <origin xyz="0 0 0" rpy="0 0 0"/>\n');
       parts.push('      <mass value="0.0001"/>\n');
@@ -685,8 +705,8 @@ export async function buildURDF(assemblyData) {
       const originPose = s.originPose;
       parts.push(`  <joint name="${s.name}" type="${s.type || 'fixed'}">\n`);
       parts.push(`    <origin xyz="${originPose.xyz.map(formatNumber).join(' ')}" rpy="${originPose.rpy.map(formatNumber).join(' ')}"/>\n`);
-      parts.push(`    <parent link="${s.parentFull}"/>\n`);
-      parts.push(`    <child link="${s.childFull}"/>\n`);
+      parts.push(`    <parent link="${getLinkDisplayName(s.parentFull)}"/>\n`);
+      parts.push(`    <child link="${getLinkDisplayName(s.childFull)}"/>\n`);
       parts.push('  </joint>\n\n');
     }
   }
@@ -736,8 +756,8 @@ export async function buildURDF(assemblyData) {
       const jtype = j.type || 'fixed';
       parts.push(`  <joint name="${j.fullName || j.name || `${pFull}_to_${cFull}`}" type="${jtype}">\n`);
       parts.push(`    <origin xyz="${decomposed.xyz.map(formatNumber).join(' ')}" rpy="${normalizeRPY(decomposed.rpy).map(formatNumber).join(' ')}"/>\n`);
-      parts.push(`    <parent link="${pFull}"/>\n`);
-      parts.push(`    <child link="${cFull}"/>\n`);
+      parts.push(`    <parent link="${getLinkDisplayName(pFull)}"/>\n`);
+      parts.push(`    <child link="${getLinkDisplayName(cFull)}"/>\n`);
 
       if (jtype === 'revolute' || jtype === 'prismatic' || jtype === 'continuous') {
         
@@ -786,4 +806,366 @@ export async function getMeshFiles(assemblyData) {
     }
   }
   return Array.from(meshSet);
+}
+
+export function generatePackageXml(packageName, description = "Auto-generated URDF package") {
+  return `<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>${packageName}</name>
+  <version>1.0.0</version>
+  <description>${description}</description>
+  <maintainer email="user@example.com">User</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher_gui</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>urdf</exec_depend>
+  <exec_depend>gazebo_ros_pkgs</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>`;
+}
+
+export function generateCMakeListsTxt(packageName) {
+  return `cmake_minimum_required(VERSION 3.8)
+project(${packageName})
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+# find dependencies
+find_package(ament_cmake REQUIRED)
+
+# Install directories
+install(DIRECTORY
+  urdf
+  meshes
+  launch
+  rviz
+  config
+  DESTINATION share/\${PROJECT_NAME}/
+)
+
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  set(ament_cmake_copyright_FOUND TRUE)
+  set(ament_cmake_cpplint_FOUND TRUE)
+  ament_lint_auto_find_test_dependencies()
+endif()
+
+ament_package()`;
+}
+
+export function generateDisplayLaunch(packageName, urdfFileName) {
+  return `import os
+from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    use_sim_time = LaunchConfiguration('use_sim_time', default='false')
+    
+    urdf_file_name = '${urdfFileName}'
+    urdf = os.path.join(
+        get_package_share_directory('${packageName}'),
+        'urdf',
+        urdf_file_name)
+    
+    with open(urdf, 'r') as infp:
+        robot_desc = infp.read()
+
+    return LaunchDescription([
+        DeclareLaunchArgument(
+            'use_sim_time',
+            default_value='false',
+            description='Use simulation (Gazebo) clock if true'),
+        
+        Node(
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            name='robot_state_publisher',
+            output='screen',
+            parameters=[{'use_sim_time': use_sim_time, 'robot_description': robot_desc}],
+            arguments=[urdf]),
+        
+        Node(
+            package='joint_state_publisher_gui',
+            executable='joint_state_publisher_gui',
+            name='joint_state_publisher_gui',
+            output='screen'),
+            
+        Node(
+            package='rviz2',
+            executable='rviz2',
+            name='rviz2',
+            output='screen',
+            arguments=['-d', os.path.join(get_package_share_directory('${packageName}'), 'rviz', 'urdf.rviz')]),
+    ])`;
+}
+
+export function generateGazeboLaunch(packageName, urdfFileName) {
+  const xacroFileName = urdfFileName.replace('.urdf', '.xacro');
+  return `import os
+from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_ros.actions import Node
+import xacro
+
+def generate_launch_description():
+    
+    xacro_file_name = '${xacroFileName}'
+    xacro_file = os.path.join(
+        get_package_share_directory('${packageName}'),
+        'urdf',
+        xacro_file_name)
+    
+    robot_desc = xacro.process_file(xacro_file).toxml()
+
+    # Gazebo launch
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
+    )
+
+    # Spawn entity
+    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
+                        arguments=['-topic', 'robot_description',
+                                   '-entity', '${packageName}'],
+                        output='screen')
+
+    return LaunchDescription([
+        gazebo,
+        Node(
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            name='robot_state_publisher',
+            output='screen',
+            parameters=[{'use_sim_time': True, 'robot_description': robot_desc}]),
+        spawn_entity,
+    ])`;
+}
+
+export function generateRvizConfig() {
+  return `Panels:
+  - Class: rviz_common/Displays
+    Help Height: 78
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /Status1
+        - /RobotModel1
+      Splitter Ratio: 0.5
+    Tree Height: 557
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Tool Properties
+    Expanded:
+      - /2D Pose Estimate1
+      - /2D Nav Goal1
+      - /Publish Point1
+    Name: Tool Properties
+    Splitter Ratio: 0.5886790156364441
+  - Class: rviz_common/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+Preferences:
+  PromptSaveOnExit: true
+Toolbars:
+  toolButtonStyle: 2
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz_default_plugins/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.029999999329447746
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: ""
+      Description Source: Topic
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /robot_description
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: RobotModel
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: base_link
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/Interact
+      Hide Inactive Objects: true
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+      Line color: 128; 128; 0
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 2.0
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05000000074505806
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 0.785398006439209
+      Target Frame: <Fixed Frame>
+      Value: Orbit (rviz_default_plugins)
+      Yaw: 0.785398006439209
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 846
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd000000040000000000000156000002f0fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b000002f0000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500670065007400730100000041000000e80000000000000000fb0000000c004b006900650063007400020000000000000000000000000000000000
+  Selection:
+    collapsed: false
+  Tool Properties:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 1200
+  X: 100
+  Y: 100`;
+}
+
+export function generateJointStateConfig() {
+  return `joint_state_publisher:
+  ros__parameters:
+    use_gui: true
+    rate: 50`;
+}
+
+export function generateXacroFile(packageName, urdfFileName) {
+  return `<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="${packageName}">
+  
+  <!-- Include the main URDF -->
+  <xacro:include filename="\$(find ${packageName})/urdf/${urdfFileName}" />
+  
+  <!-- Add Gazebo plugins and materials here if needed -->
+  
+</robot>`;
+}
+
+export function generateGazeboFile(packageName, assemblyData) {
+  let gazeboContent = `<?xml version="1.0" ?>
+<robot name="${packageName}" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+<xacro:property name="body_color" value="Gazebo/Silver" />
+`;
+
+  // Generate gazebo tags for all links that are included in URDF
+  const instances = Object.values(assemblyData.instances || {});
+  
+  // Find the root instance and its root link for renaming to base_link
+  let rootInstanceId = null;
+  let originalRootLinkName = null;
+  for (const inst of instances) {
+    if (!inst.parentId) {
+      rootInstanceId = inst.id;
+      originalRootLinkName = inst.rootLinkName || (inst.links && inst.links[0] && inst.links[0].name);
+      break;
+    }
+  }
+
+  const rootLinkFullName = rootInstanceId ? `${rootInstanceId}__${originalRootLinkName}` : null;
+
+  // Helper function to get display name for links (same as in buildURDF)
+  function getLinkDisplayName(fullName) {
+    if (fullName === rootLinkFullName) {
+      return 'base_link';
+    }
+    return fullName;
+  }
+
+  // Process all links that have visual or collision
+  for (const inst of instances) {
+    if (!inst.links) continue;
+    for (const link of inst.links) {
+      if (link.isAttachOnly) continue; // Skip attach-only links
+      if (!(link.hasVisual || link.hasCollision)) continue; // Skip links without visual/collision
+      
+      const displayName = getLinkDisplayName(link.fullName);
+      
+      gazeboContent += `<gazebo reference="${displayName}">
+  <material>\${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+  <gravity>true</gravity>
+</gazebo>
+`;
+    }
+  }
+
+  gazeboContent += `</robot>`;
+  return gazeboContent;
 }
