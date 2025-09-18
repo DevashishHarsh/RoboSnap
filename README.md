@@ -28,3 +28,8 @@ URDF (Unified Robot Description Format) is an XML-based format widely used in th
 
 ## License
 This project is released under the MIT License.
+
+## Notes
+- Built with a "vibe coding" style (fast iteration, pragmatic UI-first development), informed by CAD modelling and URDF systems knowledge.
+
+- The site/editor works locally as a static web app; export produces ROS-compatible package scaffolding for quick simulation/visualization.
