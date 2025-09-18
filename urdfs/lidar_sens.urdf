@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<robot name="lidar_sens">
+
+<link name="lidar_sens_base_link">
+  <inertial>
+    <origin xyz="-5.228397220519779e-13 0.0 0.0025000000000000005" rpy="0 0 0"/>
+    <mass value="0.0007706719478337129"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/lidar_sens_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="meshes/lidar_sens_base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lidar_sens_AP_1">
+  <inertial>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <mass value="4.110250388446646e-06"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  
+  
+</link>
+
+<joint name="Rigid 1" type="fixed">
+  <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  <parent link="lidar_sens_base_link"/>
+  <child link="lidar_sens_AP_1"/>
+</joint>
+
+</robot>

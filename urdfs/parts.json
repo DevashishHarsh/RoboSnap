@@ -42,6 +42,12 @@
     "desc": "Detect signals, gather data"
   },
   {
+    "url": "urdfs/lidar_sens.urdf",
+    "title": "Lidar",
+    "icon_url": "static/images/icons/sens.svg",
+    "desc": "Detect signals, gather data"
+  },
+  {
     "url": "urdfs/prismatic_j.urdf",
     "title": "Prismatic",
     "icon_url": "static/images/icons/joint.svg",
